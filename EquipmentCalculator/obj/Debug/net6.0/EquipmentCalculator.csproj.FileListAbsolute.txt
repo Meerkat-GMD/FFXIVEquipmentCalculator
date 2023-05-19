@@ -1,0 +1,17 @@
+C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\bin\Debug\net6.0\EquipmentCalculator.exe
+C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\bin\Debug\net6.0\EquipmentCalculator.deps.json
+C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\bin\Debug\net6.0\EquipmentCalculator.runtimeconfig.json
+C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\bin\Debug\net6.0\EquipmentCalculator.dll
+C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\bin\Debug\net6.0\EquipmentCalculator.pdb
+C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.csproj.AssemblyReference.cache
+C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.AssemblyInfoInputs.cache
+C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.AssemblyInfo.cs
+C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.csproj.CoreCompileInputs.cache
+C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.dll
+C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\refint\EquipmentCalculator.dll
+C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.pdb
+C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.genruntimeconfig.cache
+C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\ref\EquipmentCalculator.dll
+C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.csproj.CopyComplete
