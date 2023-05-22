@@ -16,5 +16,7 @@ public class EquipmentData
     public int DIR;
     public int TEN;
     public int PIE;
-    public bool OverMeld;
+    public bool OverMeld; // True면 5개까지 가능
+    public int Slots; // 기본 슬롯 값 
+    public int MainStat;
 }
