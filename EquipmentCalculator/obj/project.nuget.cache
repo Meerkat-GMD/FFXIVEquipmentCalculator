@@ -1,10 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "GiH4j22pSon31XogHzZNV3k29FbS31XVcyhUN/27+yipB+tpKkwf6CS1KYjxnePSk3HLH9uzxSSwZzBNwSzI8Q==",
+  "dgSpecHash": "SSPQJ0YJO9kk/hqaJnhHn/vehzlDNwYgqE8xRT4Zy6ycgxxsy4SUzZDiZUaRtD1aSeqy49iHepAt43+HjEJWLQ==",
   "success": true,
-  "projectFilePath": "D:\\FFXIVEquipmentCalculator\\EquipmentCalculator\\EquipmentCalculator.csproj",
+  "projectFilePath": "D:\\Develop\\FFXIVEquipmentCalculator\\EquipmentCalculator\\EquipmentCalculator.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\NaJaeHeum\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+    "C:\\Users\\gmd13\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\gmd13\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.16\\microsoft.netcore.app.ref.6.0.16.nupkg.sha512",
+    "C:\\Users\\gmd13\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.16\\microsoft.windowsdesktop.app.ref.6.0.16.nupkg.sha512",
+    "C:\\Users\\gmd13\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.16\\microsoft.aspnetcore.app.ref.6.0.16.nupkg.sha512",
+    "C:\\Users\\gmd13\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.16\\microsoft.netcore.app.host.win-x64.6.0.16.nupkg.sha512"
   ],
   "logs": []
 }

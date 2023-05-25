@@ -15,3 +15,11 @@ C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\obj\Deb
 C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\ref\EquipmentCalculator.dll
 C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\bin\Debug\net6.0\Newtonsoft.Json.dll
 C:\Users\NaJaeHeum\RiderProjects\EquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.csproj.CopyComplete
+D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.csproj.AssemblyReference.cache
+D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.GeneratedMSBuildEditorConfig.editorconfig
+D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.AssemblyInfoInputs.cache
+D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.AssemblyInfo.cs
+D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.csproj.CoreCompileInputs.cache
+D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.dll
+D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\refint\EquipmentCalculator.dll
+D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.pdb

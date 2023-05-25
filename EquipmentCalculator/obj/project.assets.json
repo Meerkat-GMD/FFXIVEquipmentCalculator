@@ -55,19 +55,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\NaJaeHeum\\.nuget\\packages\\": {}
+    "C:\\Users\\gmd13\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\FFXIVEquipmentCalculator\\EquipmentCalculator\\EquipmentCalculator.csproj",
+      "projectUniqueName": "D:\\Develop\\FFXIVEquipmentCalculator\\EquipmentCalculator\\EquipmentCalculator.csproj",
       "projectName": "EquipmentCalculator",
-      "projectPath": "D:\\FFXIVEquipmentCalculator\\EquipmentCalculator\\EquipmentCalculator.csproj",
-      "packagesPath": "C:\\Users\\NaJaeHeum\\.nuget\\packages\\",
-      "outputPath": "D:\\FFXIVEquipmentCalculator\\EquipmentCalculator\\obj\\",
+      "projectPath": "D:\\Develop\\FFXIVEquipmentCalculator\\EquipmentCalculator\\EquipmentCalculator.csproj",
+      "packagesPath": "C:\\Users\\gmd13\\.nuget\\packages\\",
+      "outputPath": "D:\\Develop\\FFXIVEquipmentCalculator\\EquipmentCalculator\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\NaJaeHeum\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\gmd13\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
@@ -102,16 +102,35 @@
           "net47",
           "net471",
           "net472",
-          "net48"
+          "net48",
+          "net481"
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[6.0.16, 6.0.16]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[6.0.16, 6.0.16]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[6.0.16, 6.0.16]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[6.0.16, 6.0.16]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\NaJaeHeum\\.dotnet\\sdk\\6.0.302\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Users\\gmd13\\.dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
       }
     }
   }

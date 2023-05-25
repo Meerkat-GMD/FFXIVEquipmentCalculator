@@ -6,20 +6,13 @@ using Newtonsoft.Json;
 
 Console.WriteLine("Hello, World!");
 
-string path = "../../../FF14.json";
-EquipmentData[] data;
+var equipmentDataManager = new EquipmentDataManager();
 
-using (StreamReader file = File.OpenText(path))
-{
-    string jsonRawData = file.ReadToEnd();
-    data = JsonConvert.DeserializeObject<EquipmentData[]>(jsonRawData);
-}
+//Console.WriteLine("원하는 직업, 레벨");
+//var className = Console.ReadLine();
+var className = ClassJobCategory.BLM;
+
+equipmentDataManager.GetClassEquipmentData(className, 640, 650);
 
 
-foreach (var d in data)
-{
-    Console.WriteLine($"{d.Name} : {d.ClassJobCategory[0]}");
-}
-
-Console.ReadLine();
 Console.WriteLine("GoodBye, World!");
