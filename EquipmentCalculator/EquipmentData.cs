@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Runtime.InteropServices.ComTypes;
+using Newtonsoft.Json;
 
 namespace EquipmentCalculator;
 
@@ -10,22 +11,25 @@ public class EquipmentData
 
     [JsonConverter(typeof(CustomEnumListConverter<ClassJobCategory>))]
     public List<ClassJobCategory> ClassJobCategory;
+    public bool IsUnique;
     public int CRT;
     public int DET;
     public int DIR;
     public int TEN;
     public int PIE;
-    public string P_Abbrv;
+    [JsonConverter(typeof(CustomStatCategoryConverter))]
+    public StatCategory P_Abbrv;
     public int P_Value;
-    public string S_Abbrv;
+    [JsonConverter(typeof(CustomStatCategoryConverter))]
+    public StatCategory S_Abbrv;
     public int S_Value;
     public bool OverMeld; // True면 5개까지 가능
     public int Slots; // 기본 슬롯 값 
     public int MainStat;
     public int iLvl;
 
-    [JsonIgnore] public int SPS => P_Abbrv == "SPS" ? P_Value : S_Abbrv == "SPS" ? S_Value : 0;
-    [JsonIgnore] public int SKS => P_Abbrv == "SKS" ? P_Value : S_Abbrv == "SKS" ? S_Value : 0;
+    [JsonIgnore] public int SPS => P_Abbrv == StatCategory.SPS ? P_Value : S_Abbrv == StatCategory.SPS ? S_Value : 0;
+    [JsonIgnore] public int SKS => P_Abbrv == StatCategory.SKS ? P_Value : S_Abbrv == StatCategory.SKS ? S_Value : 0;
 
     public int GetTomeStone()
     {
@@ -49,6 +53,17 @@ public class EquipmentData
         
         return 0;
     }
+
+    public bool IsNormalEquipment()
+    {
+        if (Name.Contains("Light-"))
+        {
+            return true;
+        }
+
+        return false;
+    }
+    
 }
 
 public class EquipmentDataGroup
@@ -62,17 +77,20 @@ public class CategoryEquipmentDataGroup
 }
 
 
-public class EquipmentDataManager
+public class FFXIVDataManager
 {
     private EquipmentData[] _rawParsingData;
+    private FoodData[] _rawFoodParsingData;
 
-    readonly string parsingPath = "../../../FF14_1.json";
+    readonly string parsingPath = "../../../FF14Equipment.xlsm.json";
+    readonly string foodParsingPath = "../../../FF14Food.xlsm.json";
 
     private readonly Dictionary<ClassJobCategory, EquipmentDataGroup> _classEquipmentDataDic = new(); // only class not job
-
-    public EquipmentDataManager()
+    public FoodData[] FoodData => _rawFoodParsingData;
+    public FFXIVDataManager()
     {
         Parse();
+        FoodParse();
     }
     
     private void Parse()
@@ -100,6 +118,15 @@ public class EquipmentDataManager
                 
                 equipmentDataGroup.DataGroup.Add(data);
             }
+        }
+    }
+
+    private void FoodParse()
+    {
+        using (StreamReader file = File.OpenText(foodParsingPath))
+        {
+            string jsonRawData = file.ReadToEnd();
+            _rawFoodParsingData = JsonConvert.DeserializeObject<FoodData[]>(jsonRawData);
         }
     }
 

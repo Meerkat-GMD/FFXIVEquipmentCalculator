@@ -2,30 +2,18 @@
 
 public enum ItemUICategory
 {
-    //구분자용
-    LeftSideStart,
-    //
-    Weapon,
-    Head,
-    Body,
-    Hands,
-    Legs,
-    Feet,
+    Weapon = 0,
+    Head = 1,
+    Body = 2,
+    Hands = 3,
+    Legs = 4,
+    Feet = 5,
     
-    //구분자용
-    LeftSideEnd,
-    RightSideStart,
-    //
-    
-    Earrings,
-    Necklace,
-    Bracelets,
-    Ring,
-    Ring1,
-    
-    //구분자용
-    RightSideEnd,
-    //
+    Earrings = 6,
+    Necklace = 7,
+    Bracelets = 8,
+    Ring = 9,
+    Ring1 = 10,
 }
 public enum ClassJobCategory
 {
@@ -62,6 +50,7 @@ public enum ClassJobCategory
     NIN,
     SAM,
     RPR,
+    VPR,
 
     #endregion
     
@@ -81,6 +70,18 @@ public enum ClassJobCategory
     SMN,
     RDM,
     BLU,
+    PCT,
 
     #endregion
+}
+
+public enum StatCategory
+{
+    CRT,
+    DET,
+    DIR,
+    TEN,
+    PIE,
+    SKS,
+    SPS
 }

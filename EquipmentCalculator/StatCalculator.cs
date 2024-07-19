@@ -2,9 +2,9 @@
 
 public static class StatCalculator
 {
-    public const int BaseCRT = 400;
-    public const int BaseDIR = 400;
-    public const int BaseDET = 390;
+    public const int BaseCRT = 420;
+    public const int BaseDIR = 420;
+    public const int BaseDET = 440;
 
     public class Stat
     {
@@ -70,11 +70,11 @@ public static class StatCalculator
 
     public static float CalculateExpectedDamage(this Stat stat) => ExpectedDamage(stat.CRT, stat.DIR, stat.DET);
     
-    public static float CalculateCRTRate(int crtStat) => (float)(200 * (crtStat - 400) / 1900 + 50) / 1000;
-    public static float CalculateCRTMultiply(int crtStat) => (float)(200 * (crtStat - 400) / 1900 + 1400) / 1000;
-    public static float CalculateDIRRate(int dirStat) => (float)(550 * (dirStat - 400) / 1900) / 1000;
+    public static float CalculateCRTRate(int crtStat) => ((float)(200 * (crtStat - 420) / 2780) + 50) / 1000;
+    public static float CalculateCRTMultiply(int crtStat) => ((float)(200 * (crtStat - 420) / 2780) + 1400) / 1000;
+    public static float CalculateDIRRate(int dirStat) => (float)(550 * (dirStat - 420) / 2780) / 1000;
     public static float DirMultiPly => 1.25f;
-    public static float CalculateDETMultiply(int detStat) => (float)(140 * (detStat - 390) / 1900 + 1000) / 1000;
+    public static float CalculateDETMultiply(int detStat) => (1000 + (float)(140 * (detStat - 440) / 2780)) / 1000;
 
     public static float DeterminationExpectedDamage(int detStat) => CalculateDETMultiply(detStat);
     
@@ -100,6 +100,7 @@ public static class StatCalculator
 
         return (detMul * crtMul * DirMultiPly) * (crtRate * dirRate) +
                (detMul * crtMul) * (crtRate * (1 - dirRate)) +
-               (detMul * DirMultiPly) * ((1 - crtRate) * dirRate) + detMul * ((1 - crtRate) * (1 - dirRate));
+               (detMul * DirMultiPly) * ((1 - crtRate) * dirRate) + 
+               detMul * ((1 - crtRate) * (1 - dirRate));
     }
 }

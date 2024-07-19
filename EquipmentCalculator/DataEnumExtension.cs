@@ -41,6 +41,39 @@ public static class DataEnumExtension
         }
     }
 
+    public static int NormalEquipmentExchangeTokenNum(this ItemUICategory itemUiCategory)
+    {
+        switch (itemUiCategory)
+        {
+            case ItemUICategory.Weapon:
+                return 7;
+            case ItemUICategory.Head:
+                return 2;
+            case ItemUICategory.Body:
+                return 4;
+            case ItemUICategory.Hands:
+                return 2;
+            case ItemUICategory.Legs:
+                return 4;
+            case ItemUICategory.Feet:
+                return 2;
+            case ItemUICategory.Earrings:
+                return 1;
+            case ItemUICategory.Necklace:
+                return 1;
+            case ItemUICategory.Bracelets:
+                return 1;
+            case ItemUICategory.Ring:
+                return 1;
+            case ItemUICategory.Ring1:
+                return 1;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(itemUiCategory), itemUiCategory, null);
+        }
+
+        return 0;
+    }
+
 
     /*
     public static ClassJobCategory JobToClass(this ClassJobCategory cj)
