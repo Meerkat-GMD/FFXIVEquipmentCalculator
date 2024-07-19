@@ -7,7 +7,7 @@ public static class DataEnumExtension
         switch (cj)
         {
             case ClassJobCategory.MRD:
-            case ClassJobCategory.GLD:
+            case ClassJobCategory.GLA:
             case ClassJobCategory.CNJ:
             case ClassJobCategory.ACN:
             case ClassJobCategory.PGL:
@@ -25,8 +25,23 @@ public static class DataEnumExtension
     {
         return !IsJob(cj);
     }
-    
-    
+
+    public static bool IsAccessory(this ItemUICategory category)
+    {
+        switch (category)
+        {
+            case ItemUICategory.Earrings:
+            case ItemUICategory.Bracelets:
+            case ItemUICategory.Necklace:
+            case ItemUICategory.Ring:
+            case ItemUICategory.Ring1:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+
     /*
     public static ClassJobCategory JobToClass(this ClassJobCategory cj)
     {

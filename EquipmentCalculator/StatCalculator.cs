@@ -13,7 +13,21 @@ public static class StatCalculator
         public int DIR;
         public int TEN;
         public int PIE;
+        public int SKS;
+        public int SPS;
         public int MainStat;
+
+        public Stat()
+        {
+            
+        }
+        public Stat(int crt, int det, int dir)
+        {
+            CRT = crt;
+            DET = det;
+            DIR = dir;
+        }
+        
 
         public static Stat operator +(Stat s, EquipmentData d)
         {
@@ -22,7 +36,22 @@ public static class StatCalculator
             s.DIR += d.DIR;
             s.TEN += d.TEN;
             s.PIE += d.PIE;
+            s.SKS += d.SKS;
+            s.SPS += d.SPS;
             s.MainStat += d.MainStat;
+            return s;
+        }
+        
+        public static Stat operator -(Stat s, EquipmentData d)
+        {
+            s.CRT -= d.CRT;
+            s.DET -= d.DET;
+            s.DIR -= d.DIR;
+            s.TEN -= d.TEN;
+            s.PIE -= d.PIE;
+            s.SKS -= d.SKS;
+            s.SPS -= d.SPS;
+            s.MainStat -= d.MainStat;
             return s;
         }
     }
@@ -39,6 +68,8 @@ public static class StatCalculator
         return baseStat;
     }
 
+    public static float CalculateExpectedDamage(this Stat stat) => ExpectedDamage(stat.CRT, stat.DIR, stat.DET);
+    
     public static float CalculateCRTRate(int crtStat) => (float)(200 * (crtStat - 400) / 1900 + 50) / 1000;
     public static float CalculateCRTMultiply(int crtStat) => (float)(200 * (crtStat - 400) / 1900 + 1400) / 1000;
     public static float CalculateDIRRate(int dirStat) => (float)(550 * (dirStat - 400) / 1900) / 1000;
