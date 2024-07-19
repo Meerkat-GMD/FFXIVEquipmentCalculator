@@ -2,16 +2,30 @@
 
 public enum ItemUICategory
 {
+    //구분자용
+    LeftSideStart,
+    //
     Weapon,
     Head,
     Body,
     Hands,
     Legs,
     Feet,
+    
+    //구분자용
+    LeftSideEnd,
+    RightSideStart,
+    //
+    
     Earrings,
     Necklace,
     Bracelets,
     Ring,
+    Ring1,
+    
+    //구분자용
+    RightSideEnd,
+    //
 }
 public enum ClassJobCategory
 {
@@ -20,7 +34,7 @@ public enum ClassJobCategory
     
     MRD,
     WAR,
-    GLD,
+    GLA,
     PLD,
     DRK,
     GNB,
@@ -66,6 +80,7 @@ public enum ClassJobCategory
     BLM,
     SMN,
     RDM,
+    BLU,
 
     #endregion
 }

@@ -23,3 +23,12 @@ D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\Equipme
 D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.dll
 D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\refint\EquipmentCalculator.dll
 D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.pdb
+D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\bin\Debug\net6.0\EquipmentCalculator.exe
+D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\bin\Debug\net6.0\EquipmentCalculator.deps.json
+D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\bin\Debug\net6.0\EquipmentCalculator.runtimeconfig.json
+D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\bin\Debug\net6.0\EquipmentCalculator.dll
+D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\bin\Debug\net6.0\EquipmentCalculator.pdb
+D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\bin\Debug\net6.0\Newtonsoft.Json.dll
+D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.csproj.CopyComplete
+D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\EquipmentCalculator.genruntimeconfig.cache
+D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\obj\Debug\net6.0\ref\EquipmentCalculator.dll
