@@ -1,61 +1,61 @@
 ﻿namespace EquipmentCalculator;
 
+public class Stat
+{
+    public int CRT;
+    public int DET;
+    public int DIR;
+    public int TEN;
+    public int PIE;
+    public int SKS;
+    public int SPS;
+    public int MainStat;
+
+    public Stat()
+    {
+            
+    }
+    public Stat(int crt, int det, int dir)
+    {
+        CRT = crt;
+        DET = det;
+        DIR = dir;
+    }
+        
+
+    public static Stat operator +(Stat s, EquipmentData d)
+    {
+        s.CRT += d.CRT;
+        s.DET += d.DET;
+        s.DIR += d.DIR;
+        s.TEN += d.TEN;
+        s.PIE += d.PIE;
+        s.SKS += d.SKS;
+        s.SPS += d.SPS;
+        s.MainStat += d.MainStat;
+        return s;
+    }
+        
+    public static Stat operator -(Stat s, EquipmentData d)
+    {
+        s.CRT -= d.CRT;
+        s.DET -= d.DET;
+        s.DIR -= d.DIR;
+        s.TEN -= d.TEN;
+        s.PIE -= d.PIE;
+        s.SKS -= d.SKS;
+        s.SPS -= d.SPS;
+        s.MainStat -= d.MainStat;
+        return s;
+    }
+}
+
 public static class StatCalculator
 {
     public const int BaseCRT = 420;
     public const int BaseDIR = 420;
     public const int BaseDET = 440;
-
-    public class Stat
-    {
-        public int CRT;
-        public int DET;
-        public int DIR;
-        public int TEN;
-        public int PIE;
-        public int SKS;
-        public int SPS;
-        public int MainStat;
-
-        public Stat()
-        {
-            
-        }
-        public Stat(int crt, int det, int dir)
-        {
-            CRT = crt;
-            DET = det;
-            DIR = dir;
-        }
-        
-
-        public static Stat operator +(Stat s, EquipmentData d)
-        {
-            s.CRT += d.CRT;
-            s.DET += d.DET;
-            s.DIR += d.DIR;
-            s.TEN += d.TEN;
-            s.PIE += d.PIE;
-            s.SKS += d.SKS;
-            s.SPS += d.SPS;
-            s.MainStat += d.MainStat;
-            return s;
-        }
-        
-        public static Stat operator -(Stat s, EquipmentData d)
-        {
-            s.CRT -= d.CRT;
-            s.DET -= d.DET;
-            s.DIR -= d.DIR;
-            s.TEN -= d.TEN;
-            s.PIE -= d.PIE;
-            s.SKS -= d.SKS;
-            s.SPS -= d.SPS;
-            s.MainStat -= d.MainStat;
-            return s;
-        }
-    }
-
+    public const int BaseSpeed = 420;
 
     public static Stat CalculateBaseStat(EquipmentDataGroup data)
     {
@@ -75,7 +75,7 @@ public static class StatCalculator
     public static float CalculateDIRRate(int dirStat) => (float)(550 * (dirStat - 420) / 2780) / 1000;
     public static float DirMultiPly => 1.25f;
     public static float CalculateDETMultiply(int detStat) => (1000 + (float)(140 * (detStat - 440) / 2780)) / 1000;
-    public static float CalculateGCD(int ssStat) => 2500 * (1000 + (130 * (420 - ssStat) / 2780)) / 10000 / (float)100;
+    public static float CalculateGCD(int ssStat) => (float)25 * (1000 + (130 * (420 - ssStat) / 2780)) / 10000;
 
     public static float DeterminationExpectedDamage(int detStat) => CalculateDETMultiply(detStat);
     

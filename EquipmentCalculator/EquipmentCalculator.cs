@@ -5,10 +5,12 @@ public struct StatAvailableData
     public int EquipmentCritical;
     public int EquipmentDirectHit;
     public int EquipmentDetermination;
+    public int EquipmentSpeed;
     public int MaxCritical;
     public int MaxDetermination;
     public int MaxDirectHit;
     public int AllSlotValue;
+    public int ExcludeCriticalValue;
 }
 
 public class DamageWithEquipmentAndStat
@@ -18,6 +20,8 @@ public class DamageWithEquipmentAndStat
     public int Critical;
     public int DirectHit;
     public int Determination;
+    public int Speed;
+    public int SpeedMateria;
     public string FoodName;
 }
 
@@ -26,6 +30,7 @@ public class EquipmentCalculator
     private CategoryEquipmentDataGroup _categoryEquipmentDataGroup;
     private List<FoodData> _foodDataList;
     private float _bestExpectedDamage;
+    private float _targetGCD;
     private DamageWithEquipmentAndStat _bestEquipmentAndStat = new();
     public EquipmentCalculator(CategoryEquipmentDataGroup categoryEquipmentDataGroup, FoodData[] foodData)
     {
@@ -33,11 +38,12 @@ public class EquipmentCalculator
         _foodDataList = foodData.ToList();
     }
     
-    public DamageWithEquipmentAndStat GetBestEquipmentWithMeld()
+    public DamageWithEquipmentAndStat GetBestEquipmentWithMeld(float targetGCD)
     {
         Dictionary<ItemUICategory, EquipmentData> currentEquipment = new();
         _bestEquipmentAndStat = new(); 
         _bestExpectedDamage = 0f;
+        _targetGCD = targetGCD;
 
         Recursive(ItemUICategory.Weapon, currentEquipment, 0);
         
@@ -75,7 +81,50 @@ public class EquipmentCalculator
                 
                 currentEquipment[ItemUICategory.Ring1] = item;
                 var criticalAvailable = CalculateAvailableCritical(currentEquipment);
-                (var expectedDamage, StatCalculator.Stat bestStat, string foodName) = CalculateExpectedDamage(criticalAvailable);
+
+                if (!GCDTier.GCDTierList.TryGetValue(_targetGCD - 0.01f, out var nextGCDMinimum))
+                {
+                    Console.WriteLine("GCD 데이터를 초과했습니다.");
+                    return;
+                }
+
+                if (nextGCDMinimum <= criticalAvailable.EquipmentSpeed + StatCalculator.BaseSpeed)
+                {
+                    return;
+                }
+
+                var targetGCDMinimumStat = GCDTier.GCDTierList[_targetGCD];
+
+                int needStat = targetGCDMinimumStat - (criticalAvailable.EquipmentSpeed + StatCalculator.BaseSpeed);
+                int needMateria = 0;
+                if (needStat > 0)
+                {
+                    needMateria = needStat / Const.SelectMateriaValue;
+                    if (needStat % Const.SelectMateriaValue > 0)
+                    {
+                        needMateria++;
+                    }    
+                    criticalAvailable.ExcludeCriticalValue -= needMateria * Const.SelectMateriaValue;
+                }
+
+                if (criticalAvailable.ExcludeCriticalValue < 0)
+                {
+                    int getToCriticalMateria = (-criticalAvailable.ExcludeCriticalValue) / Const.SelectMateriaValue;
+                    if ((-criticalAvailable.ExcludeCriticalValue) % Const.SelectMateriaValue > 0)
+                    {
+                        getToCriticalMateria++;
+                    }
+
+                    criticalAvailable.MaxCritical -= getToCriticalMateria * Const.SelectMateriaValue;
+                    criticalAvailable.ExcludeCriticalValue += getToCriticalMateria * Const.SelectMateriaValue;
+                }
+
+                if (criticalAvailable.MaxCritical < 0)
+                {
+                    continue;
+                }
+                
+                (var expectedDamage, Stat bestStat, string foodName) = CalculateExpectedDamage(criticalAvailable);
                 if (_bestExpectedDamage < expectedDamage)
                 {
                     _bestExpectedDamage = expectedDamage;
@@ -84,6 +133,8 @@ public class EquipmentCalculator
                     _bestEquipmentAndStat.Critical = bestStat.CRT;
                     _bestEquipmentAndStat.Determination = bestStat.DET;
                     _bestEquipmentAndStat.DirectHit = bestStat.DIR;
+                    _bestEquipmentAndStat.Speed = bestStat.SPS;
+                    _bestEquipmentAndStat.SpeedMateria = needMateria;
                     _bestEquipmentAndStat.FoodName = foodName;
                 }
             }
@@ -109,40 +160,60 @@ public class EquipmentCalculator
         }
     }
 
-    private (float, StatCalculator.Stat, string) CalculateExpectedDamage(StatAvailableData statAvailableData)
+    private (float, Stat, string) CalculateExpectedDamage(StatAvailableData statAvailableData)
     {
         int availableMaxCrt = StatCalculator.BaseCRT + statAvailableData.EquipmentCritical + statAvailableData.MaxCritical; //이미 최대 크리티컬
+        int baseCrt = StatCalculator.BaseCRT + statAvailableData.EquipmentCritical;
         int baseDet = StatCalculator.BaseDET + statAvailableData.EquipmentDetermination;
         int baseDir = StatCalculator.BaseDIR + statAvailableData.EquipmentDirectHit;
 
+        int maxValue = availableMaxCrt + baseDet + baseDir + statAvailableData.ExcludeCriticalValue;
+        
         float bestOfBest = 0;
-        StatCalculator.Stat bestOfStat = new();
+        Stat bestOfStat = new();
         string foodName ="";
         
-        for (int adjustCal = availableMaxCrt; adjustCal >= availableMaxCrt - Const.LowMateriaValue * 10; adjustCal -= Const.HighMateriaValue)
+        for (int adjustCal = availableMaxCrt; adjustCal >= availableMaxCrt - Const.SelectMateriaValue * 3; adjustCal -= Const.SelectMateriaValue)
         {
+            int remainCritical = availableMaxCrt - adjustCal;
             foreach (var food in _foodDataList)
             {
                 int foodCrt = Math.Clamp(adjustCal * food.CRT / 100, 0, food.CRTCap);
 
-                int maxDET = StatCalculator.BaseDET + statAvailableData.EquipmentDetermination + statAvailableData.MaxDetermination;
+                int maxDET = baseDet + statAvailableData.ExcludeCriticalValue + remainCritical;
                 float best = -1;
-                StatCalculator.Stat bestStat = new();
-                for (int det = maxDET; det >= maxDET - StatCalculator.BaseDET - statAvailableData.EquipmentDetermination; det--) 
+                Stat bestStat = new();
+                for (int det = maxDET; det >= baseDet; det--)
                 {
-                    int foodDet = Math.Clamp(det * food.DET / 100, 0, food.DETCap);
-                    int foodDir = Math.Clamp((maxDET - det + baseDir) * food.DIR / 100, 0, food.DIRCap);
+                    int dir = (maxDET - det) + baseDir;
+
+                    if (dir < baseDir)
+                    {
+                        continue;
+                    }
+
+                    if (dir > baseDir + statAvailableData.ExcludeCriticalValue  + remainCritical)
+                    {
+                        continue;
+                    }
+
+                    if (maxValue != adjustCal + det + dir)
+                    {
+                        Console.WriteLine("????");
+                        continue;
+                    }
                     
-                    StatCalculator.Stat stat = new StatCalculator.Stat(adjustCal + foodCrt, det + foodDet, maxDET - det + baseDir + foodDir);
+                    int foodDet = Math.Clamp(det * food.DET / 100, 0, food.DETCap);
+                    int foodDir = Math.Clamp(dir * food.DIR / 100, 0, food.DIRCap);
+                    
+                    var stat = new Stat(adjustCal + foodCrt, det + foodDet, dir + foodDir);
                     float damage = stat.CalculateExpectedDamage();
                     if (best < damage)
                     {
-                        if (MathF.Abs(stat.DIR - baseDir) % Const.HighMateriaValue == 0)
+                        if (MathF.Abs(dir - baseDir) % Const.SelectMateriaValue == 0)
                         {
                             best = damage;
-                            bestStat.CRT = stat.CRT;
-                            bestStat.DET = stat.DET;
-                            bestStat.DIR = stat.DIR;
+                            bestStat = stat;
                         }
                     }
                 }
@@ -151,6 +222,7 @@ public class EquipmentCalculator
                 {
                     bestOfBest = best;
                     bestOfStat = bestStat;
+                    bestOfStat.SPS = StatCalculator.BaseSpeed + statAvailableData.EquipmentSpeed;
                     foodName = food.Name;
                 }
             }
@@ -181,6 +253,10 @@ public class EquipmentCalculator
                 case StatCategory.DIR:
                     categoryData.EquipmentDirectHit += equipmentData.P_Value;
                     break;
+                case StatCategory.SKS:
+                case StatCategory.SPS:
+                    categoryData.EquipmentSpeed += equipmentData.P_Value;
+                    break;
             }
             
             switch (equipmentData.S_Abbrv)
@@ -193,6 +269,10 @@ public class EquipmentCalculator
                     break;
                 case StatCategory.DIR:
                     categoryData.EquipmentDirectHit += equipmentData.S_Value;
+                    break;
+                case StatCategory.SKS:
+                case StatCategory.SPS:
+                    categoryData.EquipmentSpeed += equipmentData.S_Value;
                     break;
             }
             
@@ -222,17 +302,27 @@ public class EquipmentCalculator
                     {
                         categoryData.MaxCritical += slotValue;
                     }
-                    else 
+                    else
                     {
                         if (equipmentData.P_Value > equipmentData.S_Value + categoryData.MaxCritical + slotValue)
                         {
-                            categoryData.MaxCritical += slotValue;    
+                            categoryData.MaxCritical += slotValue;
                         }
-                        else if (equipmentData.P_Value + Const.StatOverValue > equipmentData.S_Value + categoryData.MaxCritical + slotValue)
+                        else if (equipmentData.P_Value + Const.StatOverValue >
+                                 equipmentData.S_Value + categoryData.MaxCritical + slotValue)
                         {
-                            categoryData.MaxCritical += equipmentData.P_Value - equipmentData.S_Value - categoryData.MaxCritical;
+                            categoryData.MaxCritical +=
+                                equipmentData.P_Value - equipmentData.S_Value - categoryData.MaxCritical;
+                        }
+                        else
+                        {
+                            categoryData.ExcludeCriticalValue += slotValue;
                         }
                     }
+                }
+                else
+                {
+                    categoryData.ExcludeCriticalValue += slotValue;
                 }
                 
                 if (equipmentData.P_Abbrv != StatCategory.DET)
@@ -280,10 +370,12 @@ public class EquipmentCalculator
             result.EquipmentCritical += categoryData.EquipmentCritical;
             result.EquipmentDetermination += categoryData.EquipmentDetermination;
             result.EquipmentDirectHit += categoryData.EquipmentDirectHit;
+            result.EquipmentSpeed += categoryData.EquipmentSpeed;
             result.MaxCritical += categoryData.MaxCritical;
             result.MaxDetermination += categoryData.MaxDetermination;
             result.MaxDirectHit += categoryData.MaxDirectHit;
             result.AllSlotValue += categoryData.AllSlotValue;
+            result.ExcludeCriticalValue += categoryData.ExcludeCriticalValue;
         }
 
         return result;
