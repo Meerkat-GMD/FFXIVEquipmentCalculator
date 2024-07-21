@@ -75,6 +75,7 @@ public static class StatCalculator
     public static float CalculateDIRRate(int dirStat) => (float)(550 * (dirStat - 420) / 2780) / 1000;
     public static float DirMultiPly => 1.25f;
     public static float CalculateDETMultiply(int detStat) => (1000 + (float)(140 * (detStat - 440) / 2780)) / 1000;
+    public static float CalculateGCD(int ssStat) => 2500 * (1000 + (130 * (420 - ssStat) / 2780)) / 10000 / (float)100;
 
     public static float DeterminationExpectedDamage(int detStat) => CalculateDETMultiply(detStat);
     
