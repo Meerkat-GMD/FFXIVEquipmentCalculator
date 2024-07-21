@@ -30,7 +30,8 @@ public class EquipmentCalculator
     private CategoryEquipmentDataGroup _categoryEquipmentDataGroup;
     private List<FoodData> _foodDataList;
     private float _bestExpectedDamage;
-    private float _targetGCD;
+    private int _targetGCD;
+    private ClassJobCategory _classJobCategory;
     private DamageWithEquipmentAndStat _bestEquipmentAndStat = new();
     public EquipmentCalculator(CategoryEquipmentDataGroup categoryEquipmentDataGroup, FoodData[] foodData)
     {
@@ -38,12 +39,13 @@ public class EquipmentCalculator
         _foodDataList = foodData.ToList();
     }
     
-    public DamageWithEquipmentAndStat GetBestEquipmentWithMeld(float targetGCD)
+    public DamageWithEquipmentAndStat GetBestEquipmentWithMeld(ClassJobCategory currentClass, int targetGCD)
     {
         Dictionary<ItemUICategory, EquipmentData> currentEquipment = new();
         _bestEquipmentAndStat = new(); 
         _bestExpectedDamage = 0f;
         _targetGCD = targetGCD;
+        _classJobCategory = currentClass;
 
         Recursive(ItemUICategory.Weapon, currentEquipment, 0);
         
@@ -82,7 +84,7 @@ public class EquipmentCalculator
                 currentEquipment[ItemUICategory.Ring1] = item;
                 var criticalAvailable = CalculateAvailableCritical(currentEquipment);
 
-                if (!GCDTier.GCDTierList.TryGetValue(_targetGCD - 0.01f, out var nextGCDMinimum))
+                if (!GCDTier.GCDTierList(_classJobCategory).TryGetValue(_targetGCD - 1, out var nextGCDMinimum))
                 {
                     Console.WriteLine("GCD 데이터를 초과했습니다.");
                     return;
@@ -93,7 +95,7 @@ public class EquipmentCalculator
                     return;
                 }
 
-                var targetGCDMinimumStat = GCDTier.GCDTierList[_targetGCD];
+                var targetGCDMinimumStat = GCDTier.GCDTierList(_classJobCategory)[_targetGCD];
 
                 int needStat = targetGCDMinimumStat - (criticalAvailable.EquipmentSpeed + StatCalculator.BaseSpeed);
                 int needMateria = 0;

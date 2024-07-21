@@ -10,7 +10,7 @@ var ffxivDataManager = new FFXIVDataManager();
 
 //Console.WriteLine("원하는 직업, 레벨");
 //var className = Console.ReadLine();
-var className = ClassJobCategory.PCT;
+var className = ClassJobCategory.SCH;
 var categoryEquipmentDataGroup = ffxivDataManager.GetClassEquipmentData(className, 700, 710);
 
 EquipmentCalculator.EquipmentCalculator equipmentCalculator = new EquipmentCalculator.EquipmentCalculator(categoryEquipmentDataGroup, ffxivDataManager.FoodData);
@@ -29,9 +29,9 @@ float bestDamageInvideGCD = -1f;
 float bestInvideGCD = -1f;
 
 
-for (float targetGCD = 2.50f; targetGCD >= 2.40f; targetGCD -= 0.01f)
+for (int targetGCD = 250; targetGCD >= 240; targetGCD -= 1)
 {
-    var result = equipmentCalculator.GetBestEquipmentWithMeld(targetGCD);
+    var result = equipmentCalculator.GetBestEquipmentWithMeld(className, targetGCD);
     if (Math.Abs(result.ExpectedDamage -
                  StatCalculator.ExpectedDamage(result.Critical, result.DirectHit, result.Determination)) <
         float.Epsilon * 8)

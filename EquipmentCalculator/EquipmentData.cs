@@ -115,6 +115,11 @@ public class FFXIVDataManager
                     equipmentDataGroup = new EquipmentDataGroup();
                     _classEquipmentDataDic.Add(cj, equipmentDataGroup);
                 }
+
+                if (equipmentDataGroup.DataGroup.Contains(data))
+                {
+                    continue;
+                }
                 
                 equipmentDataGroup.DataGroup.Add(data);
             }
