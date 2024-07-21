@@ -185,7 +185,7 @@ public class EquipmentCalculator
             foreach (var food in _foodDataList)
             {
                 int tenMax = _classJobCategory.IsTank() ? Const.SelectMateriaValue * 5 : 0;
-                for (int addTEN = 0; _classJobCategory.IsTank() && addTEN <= tenMax; addTEN += Const.SelectMateriaValue)
+                for (int addTEN = 0; addTEN <= tenMax; addTEN += Const.SelectMateriaValue)
                 {
                     int ten = baseTen + addTEN;
                     int foodCrt = Math.Clamp(adjustCal * food.CRT / 100, 0, food.CRTCap);
