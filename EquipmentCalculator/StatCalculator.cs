@@ -15,11 +15,12 @@ public class Stat
     {
             
     }
-    public Stat(int crt, int det, int dir)
+    public Stat(int crt, int det, int dir, int ten)
     {
         CRT = crt;
         DET = det;
         DIR = dir;
+        TEN = ten;
     }
         
 
@@ -56,7 +57,7 @@ public static class StatCalculator
     public const int BaseDIR = 420;
     public const int BaseDET = 440;
     public const int BaseSpeed = 420;
-
+    public const int BaseTEN = 420;
     public static Stat CalculateBaseStat(EquipmentDataGroup data)
     {
         var baseStat = new Stat();
@@ -68,7 +69,7 @@ public static class StatCalculator
         return baseStat;
     }
 
-    public static float CalculateExpectedDamage(this Stat stat) => ExpectedDamage(stat.CRT, stat.DIR, stat.DET);
+    public static float CalculateExpectedDamage(this Stat stat) => ExpectedDamage(stat.CRT, stat.DIR, stat.DET, stat.TEN);
     
     public static float CalculateCRTRate(int crtStat) => ((float)(200 * (crtStat - 420) / 2780) + 50) / 1000;
     public static float CalculateCRTMultiply(int crtStat) => ((float)(200 * (crtStat - 420) / 2780) + 1400) / 1000;
@@ -77,6 +78,7 @@ public static class StatCalculator
     public static float CalculateDETMultiply(int detStat) => (1000 + (float)(140 * (detStat - 440) / 2780)) / 1000;
     public static float CalculateGCD(int ssStat) => (float)25 * (1000 + (130 * (420 - ssStat) / 2780)) / 10000;
 
+    public static float CalculateTENMultiply(int tenStat) => (1000 + (float)(112 * (tenStat - 420) / 2780)) / 1000;
     public static float DeterminationExpectedDamage(int detStat) => CalculateDETMultiply(detStat);
     
     public static float CriticalExpectedDamage(int crtStat)
@@ -92,16 +94,16 @@ public static class StatCalculator
         return dirRate * 1.25f + (1 - dirRate);
     }
 
-    public static float ExpectedDamage(int crtStat, int dirStat, int detStat)
+    public static float ExpectedDamage(int crtStat, int dirStat, int detStat, int tenStat)
     {
         float crtRate = CalculateCRTRate(crtStat);
         float crtMul = CalculateCRTMultiply(crtStat);
         float dirRate = CalculateDIRRate(dirStat);
-        float detMul = CalculateDETMultiply(detStat);
+        float detandTenMul = CalculateDETMultiply(detStat) * CalculateTENMultiply(tenStat);
 
-        return (detMul * crtMul * DirMultiPly) * (crtRate * dirRate) +
-               (detMul * crtMul) * (crtRate * (1 - dirRate)) +
-               (detMul * DirMultiPly) * ((1 - crtRate) * dirRate) + 
-               detMul * ((1 - crtRate) * (1 - dirRate));
+        return (detandTenMul * crtMul * DirMultiPly) * (crtRate * dirRate) +
+               (detandTenMul * crtMul) * (crtRate * (1 - dirRate)) +
+               (detandTenMul * DirMultiPly) * ((1 - crtRate) * dirRate) + 
+               detandTenMul * ((1 - crtRate) * (1 - dirRate));
     }
 }

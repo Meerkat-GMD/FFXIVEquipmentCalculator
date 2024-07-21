@@ -6,6 +6,7 @@ public struct StatAvailableData
     public int EquipmentDirectHit;
     public int EquipmentDetermination;
     public int EquipmentSpeed;
+    public int EquipmentTenacity;
     public int MaxCritical;
     public int MaxDetermination;
     public int MaxDirectHit;
@@ -20,6 +21,7 @@ public class DamageWithEquipmentAndStat
     public int Critical;
     public int DirectHit;
     public int Determination;
+    public int Tenacity;
     public int Speed;
     public int SpeedMateria;
     public string FoodName;
@@ -135,6 +137,7 @@ public class EquipmentCalculator
                     _bestEquipmentAndStat.Critical = bestStat.CRT;
                     _bestEquipmentAndStat.Determination = bestStat.DET;
                     _bestEquipmentAndStat.DirectHit = bestStat.DIR;
+                    _bestEquipmentAndStat.Tenacity = bestStat.TEN;
                     _bestEquipmentAndStat.Speed = bestStat.SPS;
                     _bestEquipmentAndStat.SpeedMateria = needMateria;
                     _bestEquipmentAndStat.FoodName = foodName;
@@ -168,6 +171,7 @@ public class EquipmentCalculator
         int baseCrt = StatCalculator.BaseCRT + statAvailableData.EquipmentCritical;
         int baseDet = StatCalculator.BaseDET + statAvailableData.EquipmentDetermination;
         int baseDir = StatCalculator.BaseDIR + statAvailableData.EquipmentDirectHit;
+        int baseTen = StatCalculator.BaseTEN + statAvailableData.EquipmentTenacity;
 
         int maxValue = availableMaxCrt + baseDet + baseDir + statAvailableData.ExcludeCriticalValue;
         
@@ -180,52 +184,57 @@ public class EquipmentCalculator
             int remainCritical = availableMaxCrt - adjustCal;
             foreach (var food in _foodDataList)
             {
-                int foodCrt = Math.Clamp(adjustCal * food.CRT / 100, 0, food.CRTCap);
-
-                int maxDET = baseDet + statAvailableData.ExcludeCriticalValue + remainCritical;
-                float best = -1;
-                Stat bestStat = new();
-                for (int det = maxDET; det >= baseDet; det--)
+                int tenMax = _classJobCategory.IsTank() ? Const.SelectMateriaValue * 5 : 0;
+                for (int addTEN = 0; _classJobCategory.IsTank() && addTEN <= tenMax; addTEN += Const.SelectMateriaValue)
                 {
-                    int dir = (maxDET - det) + baseDir;
+                    int ten = baseTen + addTEN;
+                    int foodCrt = Math.Clamp(adjustCal * food.CRT / 100, 0, food.CRTCap);
 
-                    if (dir < baseDir)
+                    int maxDET = baseDet + statAvailableData.ExcludeCriticalValue + remainCritical - addTEN;
+                    float best = -1;
+                    Stat bestStat = new();
+                    for (int det = maxDET; det >= baseDet; det--)
                     {
-                        continue;
-                    }
+                        int dir = (maxDET - det) + baseDir;
 
-                    if (dir > baseDir + statAvailableData.ExcludeCriticalValue  + remainCritical)
-                    {
-                        continue;
-                    }
-
-                    if (maxValue != adjustCal + det + dir)
-                    {
-                        Console.WriteLine("????");
-                        continue;
-                    }
-                    
-                    int foodDet = Math.Clamp(det * food.DET / 100, 0, food.DETCap);
-                    int foodDir = Math.Clamp(dir * food.DIR / 100, 0, food.DIRCap);
-                    
-                    var stat = new Stat(adjustCal + foodCrt, det + foodDet, dir + foodDir);
-                    float damage = stat.CalculateExpectedDamage();
-                    if (best < damage)
-                    {
-                        if (MathF.Abs(dir - baseDir) % Const.SelectMateriaValue == 0)
+                        if (dir < baseDir)
                         {
-                            best = damage;
-                            bestStat = stat;
+                            continue;
+                        }
+
+                        if (dir > baseDir + statAvailableData.ExcludeCriticalValue  + remainCritical)
+                        {
+                            continue;
+                        }
+
+                        if (maxValue != adjustCal + det + dir + addTEN)
+                        {
+                            Console.WriteLine("????");
+                            continue;
+                        }
+                    
+                        int foodDet = Math.Clamp(det * food.DET / 100, 0, food.DETCap);
+                        int foodDir = Math.Clamp(dir * food.DIR / 100, 0, food.DIRCap);
+                    
+                        var stat = new Stat(adjustCal + foodCrt, det + foodDet, dir + foodDir, ten);
+                        float damage = stat.CalculateExpectedDamage();
+                        if (best < damage)
+                        {
+                            if (MathF.Abs(dir - baseDir) % Const.SelectMateriaValue == 0)
+                            {
+                                best = damage;
+                                bestStat = stat;
+                            }
                         }
                     }
-                }
 
-                if (best > bestOfBest)
-                {
-                    bestOfBest = best;
-                    bestOfStat = bestStat;
-                    bestOfStat.SPS = StatCalculator.BaseSpeed + statAvailableData.EquipmentSpeed;
-                    foodName = food.Name;
+                    if (best > bestOfBest)
+                    {
+                        bestOfBest = best;
+                        bestOfStat = bestStat;
+                        bestOfStat.SPS = StatCalculator.BaseSpeed + statAvailableData.EquipmentSpeed;
+                        foodName = food.Name;
+                    }
                 }
             }
             
@@ -254,6 +263,9 @@ public class EquipmentCalculator
                     break;
                 case StatCategory.DIR:
                     categoryData.EquipmentDirectHit += equipmentData.P_Value;
+                    break;    
+                case StatCategory.TEN:
+                    categoryData.EquipmentTenacity += equipmentData.P_Value;
                     break;
                 case StatCategory.SKS:
                 case StatCategory.SPS:
@@ -271,6 +283,9 @@ public class EquipmentCalculator
                     break;
                 case StatCategory.DIR:
                     categoryData.EquipmentDirectHit += equipmentData.S_Value;
+                    break;
+                case StatCategory.TEN:
+                    categoryData.EquipmentTenacity += equipmentData.S_Value;
                     break;
                 case StatCategory.SKS:
                 case StatCategory.SPS:
@@ -373,6 +388,7 @@ public class EquipmentCalculator
             result.EquipmentDetermination += categoryData.EquipmentDetermination;
             result.EquipmentDirectHit += categoryData.EquipmentDirectHit;
             result.EquipmentSpeed += categoryData.EquipmentSpeed;
+            result.EquipmentTenacity += categoryData.EquipmentTenacity;
             result.MaxCritical += categoryData.MaxCritical;
             result.MaxDetermination += categoryData.MaxDetermination;
             result.MaxDirectHit += categoryData.MaxDirectHit;

@@ -26,6 +26,11 @@ public static class DataEnumExtension
         return !IsJob(cj);
     }
 
+    public static bool IsTank(this ClassJobCategory cj)
+    {
+        return cj is ClassJobCategory.DRK or ClassJobCategory.PLD or ClassJobCategory.WAR or ClassJobCategory.GNB;
+    }
+
     public static bool IsAccessory(this ItemUICategory category)
     {
         switch (category)

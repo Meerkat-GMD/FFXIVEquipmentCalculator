@@ -10,15 +10,15 @@ var ffxivDataManager = new FFXIVDataManager();
 
 //Console.WriteLine("원하는 직업, 레벨");
 //var className = Console.ReadLine();
-var className = ClassJobCategory.SCH;
+var className = ClassJobCategory.WAR;
 var categoryEquipmentDataGroup = ffxivDataManager.GetClassEquipmentData(className, 700, 710);
 
 EquipmentCalculator.EquipmentCalculator equipmentCalculator = new EquipmentCalculator.EquipmentCalculator(categoryEquipmentDataGroup, ffxivDataManager.FoodData);
 
 
 
-var expectedDamage1 = StatCalculator.ExpectedDamage(2856, 582, 2129);
-var expectedDamage2 = StatCalculator.ExpectedDamage(2436, 1950, 2133);
+var expectedDamage1 = StatCalculator.ExpectedDamage(2856, 582, 2129, 420);
+var expectedDamage2 = StatCalculator.ExpectedDamage(2436, 1950, 2133, 420);
 
 Console.WriteLine(expectedDamage1);
 Console.WriteLine(expectedDamage2);
@@ -33,7 +33,7 @@ for (int targetGCD = 250; targetGCD >= 240; targetGCD -= 1)
 {
     var result = equipmentCalculator.GetBestEquipmentWithMeld(className, targetGCD);
     if (Math.Abs(result.ExpectedDamage -
-                 StatCalculator.ExpectedDamage(result.Critical, result.DirectHit, result.Determination)) <
+                 StatCalculator.ExpectedDamage(result.Critical, result.DirectHit, result.Determination, result.Tenacity)) <
         float.Epsilon * 8)
     {
         Console.WriteLine("Good");
@@ -55,7 +55,8 @@ for (int targetGCD = 250; targetGCD >= 240; targetGCD -= 1)
     Console.WriteLine($"예상데미지 {result.ExpectedDamage}");
     Console.WriteLine($"예상데미지/GCD {result.ExpectedDamage/targetGCD}");
     Console.WriteLine(result.FoodName);
-    Console.WriteLine($"bestCrt : {result.Critical} // bestDET : {result.Determination} // bestDIR {result.DirectHit}  // Base Speed {result.Speed} Speed Materia {result.SpeedMateria}");
+    Console.WriteLine($"bestCrt : {result.Critical} // bestDET : {result.Determination} // bestDIR {result.DirectHit} // bestTEN {result.Tenacity} " +
+                      $"// Base Speed {result.Speed} Speed Materia {result.SpeedMateria}");
 
     foreach (var kvp in result.EquipmentList)
     {
