@@ -25,6 +25,7 @@ public class EquipmentData
     public int S_Value;
     public bool OverMeld; // True면 5개까지 가능
     public int Slots; // 기본 슬롯 값 
+    public int WD;
     public int MainStat;
     public int iLvl;
 

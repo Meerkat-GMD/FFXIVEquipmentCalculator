@@ -8,4 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = EquipmentCalculator
-build_property.ProjectDir = D:\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\
+build_property.ProjectDir = C:\Users\AD02449609\Desktop\Develop\FFXIVEquipmentCalculator\EquipmentCalculator\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 

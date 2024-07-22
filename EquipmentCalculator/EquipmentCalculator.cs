@@ -2,6 +2,8 @@
 
 public struct StatAvailableData
 {
+    public int WeaponDamage;
+    public int MainStat;
     public int EquipmentCritical;
     public int EquipmentDirectHit;
     public int EquipmentDetermination;
@@ -25,6 +27,22 @@ public class DamageWithEquipmentAndStat
     public int Speed;
     public int SpeedMateria;
     public string FoodName;
+
+    public DamageWithEquipmentAndStat Copy()
+    {
+        var temp = new DamageWithEquipmentAndStat();
+        temp.ExpectedDamage = ExpectedDamage;
+        temp.EquipmentList = EquipmentList.ToDictionary(x => x.Key, x => x.Value);
+        temp.Critical = Critical;
+        temp.DirectHit = DirectHit;
+        temp.Determination = Determination;
+        temp.Tenacity = Tenacity;
+        temp.Speed = Speed;
+        temp.SpeedMateria = SpeedMateria;
+        temp.FoodName = FoodName;
+
+        return temp;
+    }
 }
 
 public class EquipmentCalculator
@@ -35,13 +53,14 @@ public class EquipmentCalculator
     private int _targetGCD;
     private ClassJobCategory _classJobCategory;
     private DamageWithEquipmentAndStat _bestEquipmentAndStat = new();
+    private DamageWithEquipmentAndStat _secondEquipmentAndStat = new();
     public EquipmentCalculator(CategoryEquipmentDataGroup categoryEquipmentDataGroup, FoodData[] foodData)
     {
         _categoryEquipmentDataGroup = categoryEquipmentDataGroup;
         _foodDataList = foodData.ToList();
     }
     
-    public DamageWithEquipmentAndStat GetBestEquipmentWithMeld(ClassJobCategory currentClass, int targetGCD)
+    public (DamageWithEquipmentAndStat, DamageWithEquipmentAndStat) GetBestEquipmentWithMeld(ClassJobCategory currentClass, int targetGCD)
     {
         Dictionary<ItemUICategory, EquipmentData> currentEquipment = new();
         _bestEquipmentAndStat = new(); 
@@ -51,7 +70,7 @@ public class EquipmentCalculator
 
         Recursive(ItemUICategory.Weapon, currentEquipment, 0);
         
-        return _bestEquipmentAndStat;
+        return (_bestEquipmentAndStat, _secondEquipmentAndStat);
     }
 
     private void Recursive(ItemUICategory itemCategory, Dictionary<ItemUICategory, EquipmentData> currentEquipment, int normalCount)
@@ -131,6 +150,8 @@ public class EquipmentCalculator
                 (var expectedDamage, Stat bestStat, string foodName) = CalculateExpectedDamage(criticalAvailable);
                 if (_bestExpectedDamage < expectedDamage)
                 {
+                    _secondEquipmentAndStat = _bestEquipmentAndStat.Copy();
+                    
                     _bestExpectedDamage = expectedDamage;
                     _bestEquipmentAndStat.ExpectedDamage = expectedDamage;
                     _bestEquipmentAndStat.EquipmentList = currentEquipment.ToDictionary(x => x.Key, x => x.Value);
@@ -191,6 +212,12 @@ public class EquipmentCalculator
                     int foodCrt = Math.Clamp(adjustCal * food.CRT / 100, 0, food.CRTCap);
 
                     int maxDET = baseDet + statAvailableData.ExcludeCriticalValue + remainCritical - addTEN;
+                    
+                    if(maxDET > baseDet + statAvailableData.MaxDetermination)
+                    {
+                        continue;
+                    }
+                    
                     float best = -1;
                     Stat bestStat = new();
                     for (int det = maxDET; det >= baseDet; det--)
@@ -217,7 +244,9 @@ public class EquipmentCalculator
                         int foodDir = Math.Clamp(dir * food.DIR / 100, 0, food.DIRCap);
                     
                         var stat = new Stat(adjustCal + foodCrt, det + foodDet, dir + foodDir, ten);
-                        float damage = stat.CalculateExpectedDamage();
+                        stat.MainStat = statAvailableData.MainStat;
+                        stat.WeaponDamage = statAvailableData.WeaponDamage;
+                        float damage = stat.CalculateExpectedDamage(_classJobCategory);
                         if (best < damage)
                         {
                             if (MathF.Abs(dir - baseDir) % Const.SelectMateriaValue == 0)
@@ -253,6 +282,9 @@ public class EquipmentCalculator
         {
             var categoryData = new StatAvailableData();
 
+            categoryData.WeaponDamage += equipmentData.WD;
+            categoryData.MainStat += equipmentData.MainStat;
+            
             switch (equipmentData.P_Abbrv)
             {
                 case StatCategory.CRT:
@@ -384,6 +416,8 @@ public class EquipmentCalculator
                 categoryData.AllSlotValue += slotValue;
             }
 
+            result.WeaponDamage += categoryData.WeaponDamage;
+            result.MainStat += categoryData.MainStat;
             result.EquipmentCritical += categoryData.EquipmentCritical;
             result.EquipmentDetermination += categoryData.EquipmentDetermination;
             result.EquipmentDirectHit += categoryData.EquipmentDirectHit;

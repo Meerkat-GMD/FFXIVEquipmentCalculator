@@ -9,6 +9,7 @@ public class Stat
     public int PIE;
     public int SKS;
     public int SPS;
+    public int WeaponDamage;
     public int MainStat;
 
     public Stat()
@@ -69,8 +70,11 @@ public static class StatCalculator
         return baseStat;
     }
 
-    public static float CalculateExpectedDamage(this Stat stat) => ExpectedDamage(stat.CRT, stat.DIR, stat.DET, stat.TEN);
-    
+    public static float CalculateExpectedDamage(this Stat stat, ClassJobCategory classJobCategory) => ExpectedDamage(stat, classJobCategory);
+
+    public static float CalculateMainStat(ClassJobCategory classJobCategory, int mainStat) => classJobCategory.IsTank()
+        ? Math.Max(0, (MathF.Floor(190 * (float)(mainStat - 440) / 440) + 100) / 100)
+        : Math.Max(0, (MathF.Floor(237 * (float)(mainStat - 440) / 440) + 100) / 100);
     public static float CalculateCRTRate(int crtStat) => ((float)(200 * (crtStat - 420) / 2780) + 50) / 1000;
     public static float CalculateCRTMultiply(int crtStat) => ((float)(200 * (crtStat - 420) / 2780) + 1400) / 1000;
     public static float CalculateDIRRate(int dirStat) => (float)(550 * (dirStat - 420) / 2780) / 1000;
@@ -94,16 +98,18 @@ public static class StatCalculator
         return dirRate * 1.25f + (1 - dirRate);
     }
 
-    public static float ExpectedDamage(int crtStat, int dirStat, int detStat, int tenStat)
+    public static float ExpectedDamage(Stat stat, ClassJobCategory classJobCategory)
     {
-        float crtRate = CalculateCRTRate(crtStat);
-        float crtMul = CalculateCRTMultiply(crtStat);
-        float dirRate = CalculateDIRRate(dirStat);
-        float detandTenMul = CalculateDETMultiply(detStat) * CalculateTENMultiply(tenStat);
+        float weaponMul = stat.WeaponDamage; // 별도의 식이 잇지만 weapondamage 1당 1씩 늘어나길래 그냥 사용
+        float mainStatMul = CalculateMainStat(classJobCategory, stat.MainStat);
+        float crtRate = CalculateCRTRate(stat.CRT);
+        float crtMul = CalculateCRTMultiply(stat.CRT);
+        float dirRate = CalculateDIRRate(stat.DIR);
+        float detandTenMul = CalculateDETMultiply(stat.DET) * CalculateTENMultiply(stat.TEN);
 
-        return (detandTenMul * crtMul * DirMultiPly) * (crtRate * dirRate) +
+        return ((detandTenMul * crtMul * DirMultiPly) * (crtRate * dirRate) +
                (detandTenMul * crtMul) * (crtRate * (1 - dirRate)) +
                (detandTenMul * DirMultiPly) * ((1 - crtRate) * dirRate) + 
-               detandTenMul * ((1 - crtRate) * (1 - dirRate));
+               detandTenMul * ((1 - crtRate) * (1 - dirRate))) * mainStatMul * weaponMul;
     }
 }
